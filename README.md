@@ -1,21 +1,21 @@
-# Wine Data Pipeline
+# Food Data Pipeline
 
-This project implements a data pipeline for processing wine data and generating food pairing recommendations using AWS Bedrock and LangChain. The pipeline consists of two main components: an AI server data pipeline for initial data processing and a web app data pipeline for generating food pairing recommendations.
+This project implements a data pipeline for processing food data and generating wine pairing recommendations using AWS Bedrock and LangChain. The pipeline consists of two main components: an AI server data pipeline for initial data processing and a web app data pipeline for generating wine pairing recommendations.
 
 ## Project Structure
 
 ```
 data_pipelines/
-├── ai_server_data_pipeline.py    # Initial data processing pipeline
-├── web_app_data_pipeline.py      # Food pairing generation pipeline
-├── run_pipelines.sh              # Script to run both pipelines sequentially
+├── food_ai_server_data_pipeline.py    # Initial data processing pipeline
+├── food_web_app_data_pipeline.py      # Wine pairing generation pipeline
+├── food_run_pipelines.sh              # Script to run both pipelines sequentially
 ├── input/
-│   └── vine_wine/
-│       └── wine_data.csv        # Input wine data
+│   └── wshk/
+│       └── food_url_list.csv        # Input food name and url
 ├── processed_output/
-│   └── processed_wine_data.csv   # Output from AI server pipeline
-└── food_pairing_output/
-    └── enriched_processed_wine_data.csv  # Final output with food pairings
+│   └── processed_food_data.csv   # Output from AI server pipeline
+└── wine_pairing_output/
+    └── enriched_processed_food_data.csv  # Final output with wine pairings
 ```
 
 ## Prerequisites
@@ -48,24 +48,23 @@ data_pipelines/
 ### 1. AI Server Data Pipeline (`ai_server_data_pipeline.py`)
 
 This pipeline processes the initial wine data, performing the following tasks:
-- Loads input wine data from CSV
-- Validates required columns
-- Processes each wine entry
-- Generates processed output with enhanced wine information
+- Loads input food data from CSV
+- Validates required columns (only food/dish name)
+- Processes each food entry
+- Generates processed output with enhanced food information
 
 ### 2. Web App Data Pipeline (`web_app_data_pipeline.py`)
 
-This pipeline generates food pairing recommendations for each wine, including:
-- Three distinct food pairings per wine
+This pipeline generates wine pairing recommendations for each food, including:
+- Three distinct wine pairings per wine
 - Detailed pairing descriptions
 - Food and wine acidity interactions
-- Regional pairing information
 - Sweetness and spiciness notes
 
-### 3. Run Script (`run_pipelines.sh`)
+### 3. Run Script (`food_run_pipelines.sh`)
 
 A shell script that orchestrates the execution of both pipelines:
-- Runs the AI server data pipeline with the input file from input/vine_wine directory
+- Runs the AI server data pipeline with the input file from input/wshk directory
 - Waits for the processed data file to be created
 - Runs the web app data pipeline
 - Verifies the output files
@@ -74,69 +73,36 @@ A shell script that orchestrates the execution of both pipelines:
 
 1. Prepare your input data in CSV format with the following columns:
    - Product Name
-   - Wine Type
-   - Wine Grapes
-   - Region
-   - Country
-   - Body
-   - Acidity
-   - Alcohol
-   - Fruitiness
-   - Minerality
-   - Sweetness / Dry
-   - Description
+   - Image URL
 
-2. Place your input CSV file in the `input/vine_wine` directory.
+     * Note: there is another repository for mapping food name to food image url through webscraping
+     * 
+2. Place your input CSV file in the `input` directory.
 
 3. Run the complete pipeline:
    ```bash
-   chmod +x run_pipelines.sh
-   ./run_pipelines.sh
+   chmod +x food_run_pipelines.sh
+   ./food_run_pipelines.sh
    ```
 
 ## Output Files
 
-1. `processed_output/processed_wine_data.csv`
-   - Contains the processed wine data with enhanced information
-   - Used as input for the food pairing pipeline
+1. `processed_output/processed_food_data.csv`
+   - Contains the processed food data with enhanced information
+   - Used as input for the wine pairing pipeline
 
-2. `food_pairing_output/enriched_processed_wine_data.csv`
-   - Final output containing wine data with food pairing recommendations
-   - Includes three distinct food pairings per wine with detailed descriptions
+2. `wine_pairing_output/enriched_processed_food_data.csv`
+   - Final output containing wine data with wine pairing recommendations
+   - Includes three distinct wine pairings per food with detailed descriptions
 
-## Food Pairing Data Structure
+## Wine Pairing Data Structure
 
 The enriched output includes the following information for each wine:
-
-### First Pairing
-- Food Pairing 1
-- Pairing Type 1
-- Course 1
-- Pairing Description 1
-- Food & Wine Acidity 1
-- Regional Pairing 1
-- Sweetness & Spiciness 1
-- Pairing Suitability 1
-
-### Second Pairing
-- Food Pairing 2
-- Pairing Type 2
-- Course 2
-- Pairing Description 2
-- Food & Wine Acidity 2
-- Regional Pairing 2
-- Sweetness & Spiciness 2
-- Pairing Suitability 2
-
-### Third Pairing
-- Food Pairing 3
-- Pairing Type 3
-- Course 3
-- Pairing Description 3
-- Food & Wine Acidity 3
-- Regional Pairing 3
-- Sweetness & Spiciness 3
-- Pairing Suitability 3
+    - Tasting_Notes: Suggested description on the basis of tasting notes
+    - Suitability: Rating of suggestion on a scale of 1 to 10
+    - Grape_Food_Type: Explanation of how the wine’s grape variety matches the food type
+    - Sweetness_Spiciness: Commentary on balance between food's sweetness/spiciness and the wine
+    - Minerality_Freshness: Notes on how the wine’s freshness/minerality interacts with the dish
 
 ## Error Handling
 
@@ -150,7 +116,7 @@ The pipeline includes comprehensive error handling:
 ## Notes
 
 - The pipeline uses AWS Bedrock for generating food pairing recommendations
-- Each wine gets three distinct food pairings with varying types and courses
+- Each food gets three distinct food pairings with varying types and courses
 - The script includes delays between API calls to avoid rate limiting
 - Output files are created in separate directories for better organization
 
@@ -165,4 +131,4 @@ If you encounter issues:
 
 ## Contributors
 
-Built by [kaulmesanyam](https://github.com/kaulmesanyam), with ❤️ 
+Built by [kaulmesanyam](https://github.com/kaulmesanyam) and [kin-mrqz](https://github.com/kin-mrqz), with ❤️ 
