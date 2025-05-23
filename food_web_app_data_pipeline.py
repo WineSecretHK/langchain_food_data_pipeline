@@ -20,35 +20,40 @@ MODEL_PARAMS = {
 }
 
 # Define the column names for the food pairing data
-FOOD_PAIRING_COLUMNS = [
+WINE_PAIRING_COLUMNS = [
     # First Pairing
-    "Food Pairing 1", "Pairing Type 1", "Course 1", "Pairing Description 1",
-    "Food & Wine Acidity 1", "Regional Pairing 1", "Food 1 Image URL",
-    "Sweetness & Spiciness 1", "Pairing Suitability 1",
+    "Wine Pairing 1", "Tasting Notes 1", "Suitability 1", "Grape and Food Type 1",
+    "Sweetness & Spiciness 1", "Minerality and Freshness 1",
     # Second Pairing
-    "Food Pairing 2", "Pairing Type 2", "Course 2", "Pairing Description 2",
-    "Food & Wine Acidity 2", "Regional Pairing 2", "Food 2 Image URL",
-    "Sweetness & Spiciness 2", "Pairing Suitability 2",
+    "Wine Pairing 2", "Tasting Notes 2", "Suitability 2", "Grape and Food Type 2",
+    "Sweetness & Spiciness 2", "Minerality and Freshness 2",
     # Third Pairing
-    "Food Pairing 3", "Pairing Type 3", "Course 3", "Pairing Description 3",
-    "Food & Wine Acidity 3", "Regional Pairing 3", "Food 3 Image URL",
-    "Sweetness & Spiciness 3", "Pairing Suitability 3"
+    "Wine Pairing 3", "Tasting Notes 3", "Suitability 3", "Grape and Food Type 3",
+    "Sweetness & Spiciness 3", "Minerality and Freshness 3",
 ]
 
 # Default values for food pairing columns
-DEFAULT_FOOD_PAIRING_VALUES = {
-    "Food 1 Image URL": "",
-    "Food 2 Image URL": "",
-    "Food 3 Image URL": "",
-    "Food & Wine Acidity 1": "",
-    "Food & Wine Acidity 2": "",
-    "Food & Wine Acidity 3": "",
-    "Regional Pairing 1": "",
-    "Regional Pairing 2": "",
-    "Regional Pairing 3": "",
-    "Sweetness & Spiciness 1": "",
-    "Sweetness & Spiciness 2": "",
-    "Sweetness & Spiciness 3": ""
+DEFAULT_WINE_PAIRING_VALUES = {
+    "Wine Pairing 1": "", 
+    "Tasting Notes 1": "",             # Tasting Notes => Pairing Description in prompt template
+    "Suitability 1": "",               # Suitability => Pairing Suitability in prompt template
+    "Grape and Food Type 1": "",
+    "Sweetness & Spiciness 1": "", 
+    "Minerality and Freshness 1": "",
+
+    "Wine Pairing 2": "", 
+    "Tasting Notes 2": "", 
+    "Suitability 2": "", 
+    "Grape and Food Type 2": "",
+    "Sweetness & Spiciness 2": "", 
+    "Minerality and Freshness 2": "",
+
+    "Wine Pairing 3": "", 
+    "Tasting Notes 3": "", 
+    "Suitability 3": "", 
+    "Grape and Food Type 3": "",
+    "Sweetness & Spiciness 3": "", 
+    "Minerality and Freshness 3": "",
 }
 
 def setup_llm():
@@ -88,27 +93,12 @@ def create_food_pairing_chains(llm):
         
         Provide three DISTINCT recommended wine pairings for this food in key-value format as follows:
         
-        Wine_Name_1: [Suggested wine]
-        Tasting_Notes_1: [Suggested description on the basis of tasting notes]
-        Suitability_1: [Rating of suggestion on a scale of 1 to 10]
-        Grape_Food_Type_1: [Explanation of how the wine’s grape variety matches the food type]
-        Sweetness_Spiciness_1: [Commentary on balance between food's sweetness/spiciness and the wine]
-        Minerality_Freshness_1: [Notes on how the wine’s freshness/minerality interacts with the dish]
+        Wine_Pairing_1: [Suggested wine]
 
-        Wine_Name_2: [Suggested wine - MUST be different from first]
-        Tasting_Notes_2: [Suggested description on the basis of tasting notes]
-        Suitability_2: [Rating of suggestion on a scale of 1 to 10]
-        Grape_Food_Type_2: [Explanation of how the wine’s grape variety matches the food type]
-        Sweetness_Spiciness_2: [Commentary on balance between food's sweetness/spiciness and the wine]
-        Minerality_Freshness_2: [Notes on how the wine’s freshness/minerality interacts with the dish]
+        Wine_Pairing_2: [Suggested wine - MUST be different from first]
 
-        Wine_Name_3: [Suggested wine - MUST be different from first]
-        Tasting_Notes_3: [Suggested description on the basis of tasting notes]
-        Suitability_3: [Rating of suggestion on a scale of 1 to 10]
-        Grape_Food_Type_3: [Explanation of how the wine’s grape variety matches the food type]
-        Sweetness_Spiciness_3: [Commentary on balance between food's sweetness/spiciness and the wine]
-        Minerality_Freshness_3: [Notes on how the wine’s freshness/minerality interacts with the dish]
-        
+        Wine_Pairing_3: [Suggested wine - MUST be different from first and second]
+
         IMPORTANT GUIDELINES:
         1. Each wine pairing must be unique and different from the others
         2. Consider the food's specific characteristics:
@@ -160,7 +150,7 @@ def create_food_pairing_chains(llm):
           - Bitterness: {bitterness}
           - Umami: {umami}
         
-        Food pairing to describe: 
+        Wine pairing to describe: 
         {wine_pairing}
         
         Provide a BRIEF 1-2 line description explaining why this wine pairs well with the food.
@@ -200,21 +190,21 @@ def create_food_pairing_chains(llm):
         Food pairing: {wine_pairing}
         
         Provide BRIEF 1-2 line notes on:
-        1. How the wine's acidity interacts with the food
-        2. How this pairing relates to regional/traditional pairings from the wine's origin
-        3. How the wine's sweetness/dryness interacts with the food's spiciness or sweetness
+        1. How the wine’s grape variety matches the food type
+        2. The balance between food's sweetness/spiciness and the wine
+        3. How the wine’s freshness/minerality interacts with the dish
         
         Consider:
         - The specific characteristics of the wine and how they interact with the food
-        - Traditional pairings from the wine's region
         - Modern interpretations of classic pairings
         - How the pairing enhances both the wine and food
         
         Format your response as key-value pairs:
-        
-        Food_Wine_Acidity: [Brief note on acidity interaction]
-        Regional_Pairing: [Brief note on regional connection]
-        Sweetness_Spiciness: [Brief note on sweetness interaction]
+
+        Grape_Food_Type: [Explanation of specific grape variety and food type]
+        Sweetness_Spiciness: [Commentary on balance]
+        Minerality_Freshness: [Note on freshness and minerality]
+
         
         Respond with only the key-value pairs above.
         """
@@ -255,10 +245,8 @@ def create_food_pairing_chains(llm):
             wine_pairings_dict = parse_keyval_response(wine_pairings)
             
             # Verify we have three distinct pairings
-            pairings = [
-                (wine_pairings_dict.get(f"Food_Pairing_{i}", ""),
-                 wine_pairings_dict.get(f"Pairing_Type_{i}", ""),
-                 wine_pairings_dict.get(f"Course_{i}", ""))
+            pairings = [ 
+                wine_pairings_dict.get(f"Wine_Pairing_{i}", "")
                 for i in range(1, 4)
             ]
             
@@ -270,9 +258,7 @@ def create_food_pairing_chains(llm):
             
             # Process descriptions and notes for each pairing
             for i in range(1, 4):
-                wine_pairing = f"Wine_Pairing_{i}: {wine_pairings_dict.get(f'Wine_Pairing_{i}', '')}\n" \
-                             f"Pairing_Type_{i}: {wine_pairings_dict.get(f'Pairing_Type_{i}', '')}\n" \
-                             f"Course_{i}: {wine_pairings_dict.get(f'Course_{i}', '')}"
+                wine_pairing = f"Wine_Pairing_{i}: {wine_pairings_dict.get(f'Wine_Pairing_{i}', '')}\n" 
                 
                 pairing_result = process_single_pairing(food_data, wine_pairing, i)
                 if pairing_result:
@@ -302,19 +288,6 @@ def extract_food_data(row):
         "bitterness": row.get("Bitterness", "Unknown"),
         "umami": row.get("Umami", "Unknown"),
         "tags": row.get("Tags", "Unknown"),
-
-
-        # "wine_type": row.get("Wine Type", "Unknown"),
-        # "wine_grapes": row.get("Wine Grapes", "Unknown"),
-        # "region": row.get("Region", "Unknown"),
-        # "country": row.get("Country", "Unknown"),
-        # "body": row.get("Body", "Medium"),
-        # "acidity": row.get("Acidity", "Medium"),
-        # "alcohol": row.get("Alcohol", "13.5%"),
-        # "fruitiness": row.get("Fruitiness", "Medium"),
-        # "minerality": row.get("Minerality", "Medium"),
-        # "sweetness_dry": row.get("Sweetness / Dry", "Dry"),
-        # "description": row.get("Description", "")
     }
 
 def parse_keyval_response(response_text):
@@ -370,7 +343,7 @@ def clean_text(text):
     
     return cleaned
 
-def process_wine_csv(input_file, output_file):
+def process_food_csv(input_file, output_file):
     """Process a food CSV file and generate wine pairing data."""
     print(f"Processing {input_file} for wine pairing data...")
     
@@ -416,17 +389,14 @@ def process_wine_csv(input_file, output_file):
                 # Create a new row with all the original data and the new pairing data
                 new_row = {col: clean_text(row.get(col, "")) for col in df.columns}
                 
-                # Add food pairing data for each of the three pairings
+                # Add wine pairing data for each of the three pairings
                 for i in range(1, 4):
-                    new_row[f"Sweetness {i}"] = clean_text(result.get(f"Sweetness_{i}", ""))
-                    new_row[f"Saltiness {i}"] = clean_text(result.get(f"Saltiness_{i}", ""))
-                    new_row[f"Sourness {i}"] = clean_text(result.get(f"Sourness_{i}", ""))
-                    new_row[f"Bitterness {i}"] = clean_text(result.get(f"Bitterness_{i}", ""))
-                    new_row[f"Umami {i}"] = clean_text(result.get(f"Umami_{i}", ""))
-                    new_row[f"Tags {i}"] = clean_text(result.get(f"Tags_{i}", ""))
-                    # new_row[f"Regional Pairing {i}"] = clean_text(result.get(f"Regional_Pairing_{i}", ""))
-                    # new_row[f"Sweetness & Spiciness {i}"] = clean_text(result.get(f"Sweetness_Spiciness_{i}", ""))
-                    # new_row[f"Food {i} Image URL"] = ""
+                    new_row[f"Wine Pairing{i}"] = clean_text(result.get(f"Wine_Pairing_{i}", ""))
+                    new_row[f"Tasting Notes {i}"] = clean_text(result.get(f"Pairing_Description_{i}", ""))
+                    new_row[f"Suitability {i}"] = clean_text(result.get(f"Pairing_Suitability_{i}", ""))
+                    new_row[f"Grape and Food Type {i}"] = clean_text(result.get(f"Grape_Food_Type_{i}", ""))
+                    new_row[f"Sweetness and Spiciness {i}"] = clean_text(result.get(f"Sweetness_Spiciness_{i}", ""))
+                    new_row[f"Minerality and Freshness {i}"] = clean_text(result.get(f"Minerality_Freshness_{i}", ""))
                 
                 result_data.append(new_row)
                 success = True
@@ -446,8 +416,8 @@ def process_wine_csv(input_file, output_file):
                     new_row = {col: clean_text(row.get(col, "")) for col in df.columns}
                     
                     # Add empty values for all food pairing columns
-                    for col in FOOD_PAIRING_COLUMNS:
-                        new_row[col] = clean_text(DEFAULT_FOOD_PAIRING_VALUES.get(col, ""))
+                    for col in WINE_PAIRING_COLUMNS:
+                        new_row[col] = clean_text(DEFAULT_WINE_PAIRING_VALUES.get(col, ""))
                         
                     result_data.append(new_row)
     
@@ -475,4 +445,4 @@ if __name__ == "__main__":
         input_file = os.path.join("processed_output", "processed_food_data.csv")
         output_file = os.path.join("wine_pairing_output", "enriched_food_data.csv")
     
-    process_wine_csv(input_file, output_file)
+    process_food_csv(input_file, output_file)
